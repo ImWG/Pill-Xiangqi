@@ -90,23 +90,19 @@ directions}
 symmetries}
 
 : InMySide?
-	current-player Red = IF
-		here a5 >=
-		here i1 <= AND
-	ELSE
-		here a10 >=
-		here i6 <= AND
-	ENDIF
+	FALSE \ In this game no Elephant
 ;
 
 \ Public Fortress!
 : InFortress?
-	here d1 =    here e1 = OR here f1 = OR
-	here d2 = OR here e2 = OR here f2 = OR
-	here d3 = OR here e3 = OR here f3 = OR
-	here d8 = OR here e8 = OR here f8 = OR
-	here d9 = OR here e9 = OR here f9 = OR
-	here d10 = OR here e10 = OR here f10 = OR
+	here a12 >= here c12 <= AND
+	here j12 >= here c11 <= AND OR
+	here j11 >= here c10 <= AND OR
+	here j10 >= here l10 <= AND OR
+	here a3 >= here c3 <= AND OR
+	here j3 >= here c2 <= AND OR
+	here j2 >= here c1 <= AND OR
+	here j1 >= here l1 <= AND OR
 ;
 
 VARIABLE $LosingPlayer
