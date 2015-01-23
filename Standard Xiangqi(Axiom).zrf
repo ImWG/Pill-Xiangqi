@@ -1,0 +1,207 @@
+; *** Chinese Chess
+; *** Copyright 1998-2002 Zillions Development
+; v.2.0
+
+; You need to purchase Zillions of Games to load this rules file
+; Visit the Zillions web site at http://www.zillions-of-games.com
+
+
+(game
+   (title "Standard Xiangqi")
+   (engine "Axiom\Pill Xiangqi\Axiom.dll")
+   (description "Object: Checkmate the opponent's General by attacking it so 
+      that it has no safe positions to move to.  It's also a win to stalemate
+      your opponent so that he can't move -- this usually only happens when a
+      player is reduced to a lone king.  A player may not force a repetition of
+	  moves.\\
+	  The horizontal space across the center of the board is the river separating
+	  the territories of the two sides.  Elephants are not allowed to cross the
+	  river, whereas Soldiers promote once they cross it.  The 3x3 boxes marked with
+	  an `X` at the top and bottom of the board are the Generals' imperial palaces
+	  or fortresses.  Each General and his Mandarins may not leave their fortress.\\
+	  Right-click on the pieces to see how they move.")
+   (history "Chinese Chess, or Xiangqi (Elephant Chess), derives from the same source as
+        Western Chess, though there is much debate over whether the earliest form of chess
+        began in India or China.   The first definite reference to the game is from the
+        8th century; the present form dates from about the beginning of the 12th century.
+        Xiangqi is still firmly embedded in culture in China and viewed as a folk game.
+        Among the Chinese, the rules are said to be universally known, and it is claimed
+        that Xiangqi is the world's most popular game, with perhaps 200 million players.")
+   (strategy "Unlike Western Chess, having an extra piece is not as important as having
+      a strong attack.  Attack on the General can come at any stage of the game.\\
+	  Chariots are the most valuable pieces, being worth about twice as much as a
+	  Cannon.   The Horse is slightly less valuable than the Cannon in the opening,
+        but becomes stronger as the game progresses, as it becomes more mobile and
+        the Cannon less so (due to the lack of `screens`).  Mandarins and Elephants
+        are purely defensive pieces.   Soldiers are very weak until they cross the river
+        and promote, where their increased mobility makes them useful in attack.\\
+        The most common opening moves are: moving either Cannon behind the central
+        Soldier, moving a Horse to defend the central Soldier (this also frees the
+        Chariot to occupy the adjacent file), pushing a c-file or g-file Soldier to
+        give a Horse a path to advance to the river's edge, or bringing either Elephant
+        to the front of the fortress to protect its partner.\\
+        Endgames have been studied even more deeply than in Western chess, and much
+        is known about mating possibilities with various combinations of pieces.
+        A lone General can be mated (remember that checkmate and stalemate both win,
+        and Generals cannot face each other a file with no intervening pieces) by
+        General and Soldier, General and Horse, or General and Chariot.   A Chariot
+        can even win against two Elephants or two Mandarins; two Soldiers can defeat
+        a single Elephant or two Mandarins.   Many detailed endgame examples are
+        given in H. T. Lau's book `Chinese Chess`.\\
+        Literature on the game is plentiful in Chinese (and game transcripts can be
+        understood with a little study, by learning the characters for the pieces,
+        Chinese numbers, and a few miscellaneous characters).    English-language
+        sources are less abundant; some good books and magazines can be found at
+        <http://www.zillions-of-games.com/xiangqi.html>.")
+   (music "Audio\\China.mid")
+   (win-sound "Audio\\Pan.wav")
+   (loss-sound "Audio\\Pan.wav")
+   (opening-sound "Audio\\Pan.wav")
+   (release-sound "Audio\\BongPercussive.wav")
+   (move-sound "Audio\\Bong5th.wav")
+   (capture-sound "Audio\\WoodBells.wav")
+   (players Red Blue)
+   (turn-order Red Blue)
+
+   (board
+      (image "images\PillXiangqi-boards\Standard.bmp")
+      (grid
+         (start-rectangle 5 5 29 29)
+         (dimensions
+             ("a/b/c/d/e/f/g/h/i" (24 0)) ; files
+             ("10/9/8/7/6/5/4/3/2/1" (0 24)) ; ranks
+         )
+         (directions (n 0 -1) (e 1 0) (s 0 1) (w -1 0)
+			         (ne 1 -1) (nw -1 -1) (se 1 1) (sw -1 1)
+         )
+      )
+      (symmetry Blue (n s)(s n) (nw sw)(sw nw) (ne se)(se ne))
+      (zone
+         (name fortress)
+         (players Red)
+         (positions d1 e1 f1 d2 e2 f2 d3 e3 f3)
+      )
+      (zone
+         (name fortress)
+         (players Blue)
+         (positions d10 e10 f10 d9 e9 f9 d8 e8 f8)
+      )
+      (zone
+         (name myside)
+         (players Red)
+         (positions a1 b1 c1 d1 e1 f1 g1 h1 i1
+		            a2 b2 c2 d2 e2 f2 g2 h2 i2
+					a3 b3 c4 d3 e3 f3 g3 h3 i3
+					a4 b4 c4 d4 e4 f4 g4 h4 i4
+					a5 b5 c5 d5 e5 f5 g5 h5 i5)
+      )
+      (zone
+         (name myside)
+         (players Blue)
+         (positions a10 b10 c10 d10 e10 f10 g10 h10 i10
+		            a9 b9 c9 d9 e9 f9 g9 h9 i9
+					a8 b8 c8 d8 e8 f8 g8 h8 i8
+					a7 b7 c7 d7 e7 f7 g7 h7 i7
+					a6 b6 c6 d6 e6 f6 g6 h6 i6)
+      )
+	  (dummy off-board)
+   )
+
+   (board-setup
+      (Red
+         (Soldier a4 c4 e4 g4 i4)
+         (Horse b1 h1)
+         (Elephant c1 g1)
+         (Chariot a1 i1)
+         (Mandarin d1 f1)
+		 (Cannon b3 h3)
+         (General e1)
+      )
+      (Blue
+         (Soldier a7 c7 e7 g7 i7)
+         (Horse b10 h10)
+         (Elephant c10 g10)
+         (Chariot a10 i10)
+         (Mandarin d10 f10)
+		 (Cannon b8 h8)
+         (General e10)
+      )
+   )
+
+   (piece
+      (name Soldier)
+	  (help "Soldier/Pawn: only moves forward until it crosses the river, then also left and right")
+	  (description "Soldier/Pawn (zu/tsut, bing/ping = foot soldier)\\
+	     Soldiers can move forward until they cross the center section of the board
+		 (called `crossing the river`) where they gain the ability to move left and
+		 right.")
+      (image Red "images\PillXiangqi\RedS.bmp" "images\PillXiangqi\TaiwanRedS.bmp" Blue "images\PillXiangqi\DarkBlueS.bmp" "images\PillXiangqi\TaiwanBlueS.bmp")
+   )
+   (piece
+      (name Horse)
+      (help "Horse/Knight: step orthogonally 1 square then diagonally outward 1 square")
+	  (description "Horse/Knight (ma = horse)\\
+	    Horses move like a Knight in Chess, except that they can't jump over other pieces.
+          They step outward on a row or column, then diagonally outward one step.  If
+          something is adjacent to a Horse on a row or column, it can't move in that
+          direction.")
+		(image Red "images\PillXiangqi\RedH.bmp" "images\PillXiangqi\TaiwanRedH.bmp" Blue "images\PillXiangqi\DarkBlueH.bmp" "images\PillXiangqi\TaiwanBlueH.bmp")
+   )
+   (piece
+      (name Elephant)
+      (help "Elephant: moves two steps diagonally without jumping, can't cross the river")
+	  (description "Elephant (xiang/tseung = elephant; xiang/sheung = minister/premier)\\
+	     Elephants move diagonally two steps.  However, Elephants cannot jump over other
+	     pieces, so an Elephant is blocked in any direction where another piece is
+           diagonally next to it.  Elephants are defensive pieces: they must stay on their
+           side of the board and cannot cross the 'river.'\\
+           The Elephant is similar (but without the ability to leap) to the Alfil in
+           Shatranj, the precursor to the modern Bishop.")
+      (image Red "images\PillXiangqi\RedE.bmp" "images\PillXiangqi\TaiwanRedE.bmp" Blue "images\PillXiangqi\DarkBlueE.bmp" "images\PillXiangqi\TaiwanBlueE.bmp")
+   )
+   (piece
+      (name Chariot)
+      (help "Chariot/Rook: slides any number of squares along a row or column")
+	  (description "Chariot/Rook (ju/kui = chariot)\\
+	     Chariots move like the Rook in Western Chess, that is, any number of squares along a
+		 row or column.")
+      (image Red "images\PillXiangqi\RedCh.bmp" "images\PillXiangqi\TaiwanRedCh.bmp" Blue "images\PillXiangqi\DarkBlueCh.bmp" "images\PillXiangqi\TaiwanBlueCh.bmp")
+   )
+   (piece
+      (name Cannon)
+      (help "Cannon: slides on row or column, captures by jumping")
+	  (description "Cannon (pao = cannon)\\
+	     Cannons move like Chariots/Rooks, by sliding any number of squares along
+		 a row or column, but they can capture an enemy only if there is another
+		 piece (of either side) in between.  Thus to capture they leap over the
+		 intervening piece and land on the enemy piece, like a cannonball.\\
+             One account of Xiangqi dates the introduction of the cannon at 839 A.D.")
+      (image Red "images\PillXiangqi\RedCa.bmp" "images\PillXiangqi\TaiwanRedCa.bmp" Blue "images\PillXiangqi\DarkBlueCa.bmp" "images\PillXiangqi\TaiwanBlueCa.bmp")
+   )
+   (piece
+      (name Mandarin)
+      (image Red "images\PillXiangqi\RedM.bmp" "images\PillXiangqi\TaiwanRedM.bmp" Blue "images\PillXiangqi\DarkBlueM.bmp" "images\PillXiangqi\TaiwanBlueM.bmp")
+	  (description "Mandarin (shi/see = counsellor)\\
+	     The Mandarin must stay confined to the fortress, and can only move a single step
+		 along the diagonal lines shown.  This gives it only 5 possible positions.\\
+		 This piece is often translated into other names such as Assistant, Guard,
+             Counsellor, and Officer.")
+      (help "Mandarin: steps along diagonal lines in fortress")
+   )
+   (piece
+      (name General)
+      (help "General/King: steps orthogonally within fortress, can't oppose opponent's General")
+	  (description "General/King (jiang/cheung = general, shuai/sui = general)\\
+	     The General is confined to the fortress and can only move a step at a time
+           horizontally or vertically.  It also has the special power to threaten an enemy
+           General across the board along an open column.  For this reason, it is not
+           permitted to make a move that leaves the two Generals facing each other with
+           nothing in between.\\
+	     The object of the game is to checkmate the opponent's General.")
+	  (image Red "images\PillXiangqi\RedG.bmp" "images\PillXiangqi\TaiwanRedG.bmp" Blue "images\PillXiangqi\DarkBlueG.bmp" "images\PillXiangqi\TaiwanBlueG.bmp")
+      (moves (from add))
+   )
+   ;(loss-condition (Red Blue) (captured General)  )
+   (loss-condition (Red Blue) stalemated )
+   (loss-condition (Red Blue) repetition )
+)

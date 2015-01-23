@@ -1,0 +1,390 @@
+(define canIplay?
+ (verify (and
+	(not-friend? ps1)(not-friend? ps2)(not-friend? ps3)(not-friend? ps4)
+	(not-friend? ps5)(not-friend? ps6)(not-friend? ps7)(not-friend? ps8)
+ ))
+)
+
+(define cantplay?
+ (verify (or
+  (friend? ps1) (friend? ps2) (friend? ps3) (friend? ps4)
+  (friend? ps5) (friend? ps6) (friend? ps7) (friend? ps8)
+ )))
+
+(define check-target
+ (if (piece? General) cascade ps1 (while not-empty? next) mark pr1 (while not-empty? change-owner next)(create General) back ) add
+)
+
+(define shift-myside   ((canIplay?) $1 (verify empty?) $1 (verify not-friend?) (verify (in-zone? myside)) add) )
+(define shift-fortress ((canIplay?) $1 (verify not-friend?) (verify (in-zone? fortress)) add) )
+(define shift2         ((canIplay?) $1 (verify empty?) $2 (verify not-friend?) (check-target)) )
+(define slide          ((canIplay?) $1 (while empty? add $1) (verify enemy?) (check-target)))
+(define slide-cannon   ((canIplay?) $1 (while empty? add $1) $1 (while empty? $1) (verify enemy?) (check-target)))
+(define opposed-kings  (create bn (while empty? bn) (verify (piece? General)) (check-target)) )
+
+;(define bing-move      ((canIplay?)(verify (not-in-zone? myside)) $1 (verify not-friend?) (verify(not-in-zone? myside)) add))
+(define bing-move      ((canIplay?) $1 (verify not-friend?) (check-target)))
+
+(define erase          (drops ((verify(piece? Pass)) (cantplay?) mark $1 (while (not-position? end) (if friend? capture) scan) back add) ) )
+
+(define offine
+       (positions (Center $1 $2 $3 $4)(end -100 -100 -99 -99))
+       (grid
+         (start-rectangle -110 -110 -134 -134)
+         (dimensions
+             ("pr/ps" (24 0)) ; files
+             ("1/2/3/4/5/6/7/8" (0 24)) ; ranks
+         )
+         (directions (next 0 1))
+       )
+)
+
+(define flag_imag "images\chess24\white_flag.bmp")
+
+(translate ("White" "Light"))
+
+(game
+   (title "9-players Chinese Chess")
+;   (music "Audio\\China.mid")
+;   (win-sound "Audio\\Pan.wav")
+;   (loss-sound "Audio\\Pan.wav")
+;   (opening-sound "Audio\\Pan.wav")
+;   (release-sound "Audio\\BongPercussive.wav")
+;   (move-sound "Audio\\Bong5th.wav")
+   (capture-sound "Audio\\WoodBells.wav")
+    (players Red Yellow Green Cyan Blue Pink Gray Black Dark White)
+   (turn-order Red Yellow Dark Green Cyan Dark Blue Pink Dark Black White Dark)
+   (animate-drops false)
+   (animate-captures false)
+   (pass-turn forced)
+
+   (board
+      (image "images\PillXiangqi-boards\9cc.bmp")
+      (grid
+         (start-rectangle 6 6 30 30)
+         (dimensions
+             ("a/b/c/d/e/f/m/n/o/p/q/r/s/g/h/i/j/k/l" (24 0)) ; files
+             ("12/11/10/9/8/7/19/18/17/16/15/14/13/6/5/4/3/2/1" (0 24)) ; ranks
+         )
+         (directions (n 0 -1) (e 1 0) (s 0 1) (w -1 0) (scan 0 -1)
+			         (ne 1 -1) (nw -1 -1) (se 1 1) (sw -1 1)
+              (bn 0 -1) (be 1 0) (bw -1 0) (bs 0 1);for bings
+         )
+      )
+      (offine 140 140 162 162)
+      (symmetry Blue (be bn)(bn bw)(bw bs)(bs be))
+      (symmetry Black (be bw)(bn bs)(bw be)(bs bn))
+      (symmetry Yellow (be bs)(bn be)(bw bn)(bs bw))
+      (zone
+         (name fortress)
+         (players Red)
+         (positions a1 a2 a3 b1 b2 b3 c1 c2 c3)
+      )
+      (zone
+         (name fortress)
+         (players Green)
+         (positions j1 j2 j3 k1 k2 k3 l1 l2 l3)
+      )
+      (zone
+         (name fortress)
+         (players Blue)
+         (positions j10 j11 j12 k10 k11 k12 l10 l11 l12)
+      )
+      (zone
+         (name fortress)
+         (players Yellow)
+         (positions o1 o2 o3 p1 p2 p3 q1 q2 q3)
+      )
+      (zone
+         (name fortress)
+         (players White)
+         (positions a15 b15 c15 a16 b16 c16 a17 b17 c17)
+      )
+      (zone
+         (name fortress)
+         (players Black)
+         (positions a10 a11 a12 b10 b11 b12 c10 c11 c12)
+      )
+      (zone
+         (name fortress)
+         (players Pink)
+         (positions o10 o11 o12 p10 p11 p12 q10 q11 q12)
+      )
+      (zone
+         (name fortress)
+         (players Cyan)
+         (positions j15 j16 j17 k15 k16 k17 l15 l16 l17)
+      )
+      (zone
+         (name fortress)
+         (players Dark)
+         (positions o15 o16 o17 p15 p16 p17 q15 q16 q17)
+      )
+      (zone
+         (name myside)
+         (players Red)
+         (positions a1 a2 a3 a4 a5 a6 b1 b2 b3 b4 b5 b6
+                    c1 c2 c3 c4 c5 c6 d1 d2 d3 d4 d5 d6
+                    e1 e2 e3 e4 e5 e6 f1 f2 f3 f4 f5 f6)
+      )
+      (zone
+         (name myside)
+         (players Blue)
+         (positions g1 g2 g3 g4 g5 g6 h1 h2 h3 h4 h5 h6
+                    i1 i2 i3 i4 i5 i6 j1 j2 j3 j4 j5 j6
+                    k1 k2 k3 k4 k5 k6 l1 l2 l3 l4 l5 l6)
+      )
+      (zone
+         (name myside)
+         (players Black)
+         (positions g7 g8 g9 g10 g11 g12 h7 h8 h9 h10 h11 h12
+                    i7 i8 i9 i10 i11 i12 j7 j8 j9 j10 j11 j12
+                    k7 k8 k9 k10 k11 k12 l7 l8 l9 l10 l11 l12)
+      )
+      (zone
+         (name myside)
+         (players Yellow)
+         (positions a7 a8 a9 a10 a11 a12 b7 b8 b9 b10 b11 b12
+                    c7 c8 c9 c10 c11 c12 d7 d8 d9 d10 d11 d12
+                    e7 e8 e9 e10 e11 e12 f7 f8 f9 f10 f11 f12)
+      )
+  (links scan (a12 b1)(b12 c1)(c12 d1)(d12 e1)(e12 f1)(f12 g1)(g12 h1)(h12 i1)(i12 j1)
+      (j12 k1)(k12 l1)(l12 m1)(m12 n1)(n12 o1)(o12 p1)(p12 q1)(q12 r1)(r12 s1)(s12 end))
+   )
+
+   (board-setup
+      (Red
+         (Soldier e1 e3 e5 c5 a5)
+         (Horse d1 a4)
+         (Chariot a3 c1)
+         (Mandarin a2 b1)
+		 (Cannon c4 d3)
+         (General a1)
+       (Pass Center off 1)
+      )
+      (Yellow
+         (Soldier n5 n3 n1 p5 r5 r3 r1)
+         (Horse o4 q4)
+         (Chariot o2 q2)
+         (Mandarin o1 q1)
+		 (Cannon o3 q3)
+         (General p1)
+       (Pass off 1)
+      )
+      (Green
+         (Soldier h1 h3 h5 j5 l5)
+         (Horse i1 l4)
+         (Chariot j1 l3)
+         (Mandarin k1 l2)
+		 (Cannon i3 j4)
+         (General l1)
+       (Pass off 1)
+      )
+      (Cyan
+         (Soldier h14 h16 h18 j14 j18 l14 l18)
+         (Horse i15 i17)
+         (Chariot k15 k17)
+         (Mandarin l15 l17)
+		 (Cannon j15 j17)
+         (General l16)
+       (Pass off 1)
+      )
+      (Blue
+         (Soldier h12 h10 h8 j8 l8)
+         (Horse i12 l9)
+         (Chariot j12 l10)
+         (Mandarin k12 l11)
+		 (Cannon i10 j9)
+         (General l12)
+       (Pass off 1)
+      )
+      (Pink
+         (Soldier n8 n10 n12 p8 r8 r10 r12)
+         (Horse o9 q9)
+         (Chariot o11 q11)
+         (Mandarin o12 q12)
+		 (Cannon o10 q10)
+         (General p12)
+       (Pass off 1)
+      )
+      (Black
+         (Soldier a8 c8 e8 e10 e12)
+         (Horse a9 d12)
+         (Chariot a10 c12)
+         (Mandarin a11 b12)
+		 (Cannon c9 d10)
+         (General a12)
+       (Pass off 1)
+      )
+      (White
+         (Soldier a14 a18 c14 c18 e14 e16 e18)
+         (Horse d15 d17)
+         (Chariot b15 b17)
+         (Mandarin a15 a17)
+		 (Cannon c15 c17)
+         (General a16)
+       (Pass off 1)
+      )
+      (Dark
+         (Soldier n14 p14 r14 n16 r16 n18 p18 r18)
+         (Horse p15 p17)
+         (Chariot o15 q17)
+         (Mandarin o16 q16)
+		 (Cannon q15 o17)
+         (General p16)
+       (Pass off 1)
+      )
+
+   )
+
+   (piece
+      (name Soldier)
+	  (help "Soldier/Pawn: moves one step, cannot go into your fortress.")
+	  (description "Soldier/Pawn (zu/tsut, bing/ping = foot soldier\\
+		yong/yung = skirmisher; ding/ding = man)\\
+	     Soldiers can move within one step in four directions, \\
+		 but cannot move into self's fortress.")
+      (image
+	Red "images\PillXiangqi\Reds.bmp" Black "images\PillXiangqi\Blacks.bmp"
+	Blue "images\PillXiangqi\Blues.bmp" Yellow "images\PillXiangqi\Yellows.bmp"
+	Cyan "images\PillXiangqi\Cyans.bmp" Gray "images\PillXiangqi\LightGreys.bmp"
+	Pink "images\PillXiangqi\Purples.bmp" White "images\PillXiangqi\Whites.bmp"
+Dark "images\PillXiangqi\DarkGreys.bmp" Green "images\PillXiangqi\Greens.bmp")
+      (moves
+	(bing-move s)(bing-move w)(bing-move n)(bing-move e)
+;         ((canIplay?) bn (verify not-friend?) add)
+;         ((canIplay?) be (verify not-friend?) add)
+;		 (bing-move bs)(bing-move bw)
+      )
+   )
+   (piece
+      (name Horse)
+      (help "Horse/Knight: step orthogonally 1 square then diagonally outward 1 square")
+	  (description "Horse/Knight (ma = horse)\\
+	    Horses move like a Knight in Chess, except that they can't jump over other pieces.
+          They step outward on a row or column, then diagonally outward one step.  If
+          something is adjacent to a Horse on a row or column, it can't move in that
+          direction.")
+      (image Red "images\PillXiangqi\Redh.bmp" Black "images\PillXiangqi\Blackh.bmp" Blue "images\PillXiangqi\Blueh.bmp" Yellow "images\PillXiangqi\Yellowh.bmp"
+	Cyan "images\PillXiangqi\Cyanh.bmp" Gray "images\PillXiangqi\LightGreyh.bmp"
+	Pink "images\PillXiangqi\Purpleh.bmp" White "images\PillXiangqi\Whiteh.bmp"
+Dark "images\PillXiangqi\DarkGreyh.bmp" Green "images\PillXiangqi\Greenh.bmp")
+      (moves
+	     (shift2 n ne)
+	     (shift2 n nw)
+	     (shift2 s se)
+	     (shift2 s sw)
+	     (shift2 e ne)
+	     (shift2 e se)
+	     (shift2 w nw)
+	     (shift2 w sw)
+      )
+   )
+   (piece
+      (name Elephant)
+      (help "Elephant: moves two steps diagonally without jumping, can't cross the river")
+	  (description "Elephant (xiang/tseung = elephant; xiang/sheung = minister/premier;\\
+		xiang/sheung = neck; jian/dzian = premier;)\\
+	     Elephants move diagonally two steps.  However, Elephants cannot jump over other
+	     pieces, so an Elephant is blocked in any direction where another piece is
+           diagonally next to it.  Elephants are defensive pieces: they must stay on their
+           side of the board and cannot cross the 'river.'\\
+           The Elephant is similar (but without the ability to leap) to the Alfil in
+           Shatranj, the precursor to the modern Bishop.")
+      (image Red "images\PillXiangqi\Rede.bmp" Black "images\PillXiangqi\Blacke.bmp" Blue "images\PillXiangqi\Bluee.bmp" Yellow "images\PillXiangqi\Yellowe.bmp"
+	Cyan "images\PillXiangqi\Cyane.bmp" Gray "images\PillXiangqi\LightGreye.bmp"
+	Pink "images\PillXiangqi\Purplee.bmp" White "images\PillXiangqi\Whitee.bmp"
+	Dark "images\PillXiangqi\DarkGreye.bmp" Green "images\PillXiangqi\Greene.bmp")
+      (moves
+         (shift-myside ne)
+         (shift-myside se)
+         (shift-myside nw)
+         (shift-myside sw)
+      )
+   )
+   (piece
+      (name Chariot)
+      (help "Chariot/Rook: slides any number of squares along a row or column")
+	  (description "Chariot/Rook (ju/kui = chariot)\\
+	     Chariots move like the Rook in Western Chess, that is, any number of squares along a
+		 row or column.")
+      (image Red "images\PillXiangqi\RedCh.bmp" Black "images\PillXiangqi\BlackCh.bmp" Blue "images\PillXiangqi\Bluech.bmp" Yellow "images\PillXiangqi\Yellowch.bmp"
+	Cyan "images\PillXiangqi\CyanCh.bmp" Gray "images\PillXiangqi\LightGreyCh.bmp"
+	Pink "images\PillXiangqi\PurpleCh.bmp" White "images\PillXiangqi\WhiteCh.bmp"
+	Dark "images\PillXiangqi\DarkGreyCh.bmp" Green "images\PillXiangqi\GreenCh.bmp")
+      (moves
+         (slide n)
+         (slide s)
+         (slide e)
+         (slide w)
+      )
+   )
+   (piece
+      (name Cannon)
+      (help "Cannon: slides on row or column, captures by jumping")
+	  (description "Cannon (pao = cannon)\\
+	     Cannons move like Chariots/Rooks, by sliding any number of squares along
+		 a row or column, but they can capture an enemy only if there is another
+		 piece (of either side) in between.  Thus to capture they leap over the
+		 intervening piece and land on the enemy piece, like a cannonball.\\
+             One account of Xiangqi dates the introduction of the cannon at 839 A.D.")
+      (image Red "images\PillXiangqi\RedCa.bmp" Black "images\PillXiangqi\Blackca.bmp" Blue "images\PillXiangqi\Blueca.bmp" Yellow "images\PillXiangqi\Yellowca.bmp"
+	Cyan "images\PillXiangqi\CyanCa.bmp" Gray "images\PillXiangqi\LightGreyCa.bmp"
+	Pink "images\PillXiangqi\PurpleCa.bmp" White "images\PillXiangqi\WhiteCa.bmp"
+	Dark "images\PillXiangqi\DarkGreyCa.bmp" Green "images\PillXiangqi\GreenCa.bmp")
+      (moves
+         (slide-cannon n)
+         (slide-cannon s)
+         (slide-cannon e)
+         (slide-cannon w)
+     )
+   )
+   (piece
+      (name Mandarin)
+      (image Red "images\PillXiangqi\Redm.bmp" Black "images\PillXiangqi\Blackm.bmp" Blue "images\PillXiangqi\Bluem.bmp" Yellow "images\PillXiangqi\Yellowm.bmp"
+	Cyan "images\PillXiangqi\Cyanm.bmp" Gray "images\PillXiangqi\LightGreym.bmp"
+	Pink "images\PillXiangqi\Purplem.bmp" White "images\PillXiangqi\Whitem.bmp"
+	Dark "images\PillXiangqi\DarkGreym.bmp" Green "images\PillXiangqi\Greenm.bmp")
+	  (description "Mandarin (shi/see = counsellor)\\
+	     The Mandarin must stay confined to the fortress, and can only move a single step
+		 along the diagonal lines shown.  This gives it only 5 possible positions.\\
+		 This piece is often translated into other names such as Assistant, Guard,
+             Counsellor, and Officer.")
+      (help "Mandarin: steps along diagonal lines in fortress")
+      (moves
+         (shift-fortress ne)
+         (shift-fortress nw)
+         (shift-fortress se)
+         (shift-fortress sw)
+      )
+   )
+   (piece
+      (name General)
+      (image Red "images\PillXiangqi\Redg.bmp" Black "images\PillXiangqi\Blackg.bmp" Blue "images\PillXiangqi\Blueg.bmp" Yellow "images\PillXiangqi\Yellowg.bmp"
+	Cyan "images\PillXiangqi\Cyang.bmp" Gray "images\PillXiangqi\LightGreyg.bmp"
+	Pink "images\PillXiangqi\Purpleg.bmp" White "images\PillXiangqi\Whiteg.bmp"
+	Dark "images\PillXiangqi\DarkGreyg.bmp" Green "images\PillXiangqi\Greeng.bmp")
+      (help "General/King: steps orthogonally within fortress.")
+	  (description "General/King (jiang/cheung = general, shuai/sui = general,\\
+		wang/wang = king, shou/sho = leader)\\
+	     The General is confined to the fortress and can only move a step at a time
+           horizontally or vertically.\\
+	     The object of the game is to capture the opponent's General.")
+      (moves
+;	     (opposed-kings)
+         (shift-fortress w)
+         (shift-fortress e)
+         (shift-fortress n)
+         (shift-fortress s)
+      )
+   )
+   (piece
+      (name Pass)(dummy)
+      (image
+ Red (flag_imag) Yellow (flag_imag) Green (flag_imag) Cyan (flag_imag) Blue (flag_imag)
+ Pink (flag_imag) Gray (flag_imag) Black (flag_imag) Dark (flag_imag) White (flag_imag)
+	 )
+       (erase a1)
+   )
+   (win-condition (Red Black Blue Yellow Cyan Pink Gray White) (absolute-config General (pr8)))
+)
