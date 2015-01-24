@@ -1,3 +1,6 @@
+\ Surrender: True is convertall, false is destroy all.
+FALSE CONSTANT #Surrender
+
 {players
 	{player} Red
 	{player} Blue
@@ -118,7 +121,14 @@ VARIABLE $CurrentPosition
 	BEGIN
 		$CurrentPosition @
 		DUP player-at $LosingPlayer @ = IF \ Pos
-			DUP current-player SWAP change-owner-at \ Pos
+			DUP here <> IF
+				DUP
+				#Surrender IF
+					current-player SWAP change-owner-at \ Pos
+				ELSE
+					capture-at
+				ENDIF
+			ENDIF
 		ENDIF
 		$CurrentPosition ++
 		l1 = 
@@ -183,23 +193,21 @@ pieces}
 
 : OnIsGameOver
 	#UnknownScore
-	RedLost @
-	IF
-		DROP
-		current-player Red = IF
-			^" You lose " #LossScore
+	RedLost @ YellowLost @ AND IF
+		DROP 
+		current-player DUP Red = SWAP Yellow =  IF
+			DROP ^" Red and Yellow lose. " #LossScore
 		ELSE
-			^" You win " #WinScore
+			DROP ^" Red and Yellow lose. " #WinScore
 		ENDIF
 	ELSE
-		BlueLost @
-		IF
-			DROP
-			current-player Blue = IF
-				^" You win "  #UnknownScore
+		BlueLost @ GreyLost @ AND IF
+			DROP 
+			current-player DUP Red = SWAP Yellow =  IF
+				^" Blue and Grey lose. " #WinScore
 			ELSE
-				^" You lose " #LossScore
+				^" Blue and Grey lose. " #LossScore
 			ENDIF
 		ENDIF
-	ENDIF 
+	ENDIF
 ;

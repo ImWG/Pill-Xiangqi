@@ -1,9 +1,7 @@
-; *** Chinese Chess
-; *** Copyright 1998-2002 Zillions Development
-; v.2.0
-
-; You need to purchase Zillions of Games to load this rules file
-; Visit the Zillions web site at http://www.zillions-of-games.com
+;4-handed Xiangqi
+;By W. Zhang
+;In Jun 24, 2015
+;You can download source codes in github: https://github.com/ImWG/Pill-Xiangqi.git
 
 
 (game
@@ -201,7 +199,7 @@
 	  (image Red "images\PillXiangqi\RedG.bmp" "images\PillXiangqi\TaiwanRedG.bmp" Blue "images\PillXiangqi\DarkBlueG.bmp" "images\PillXiangqi\TaiwanBlueG.bmp")
       (moves (from add))
    )
-   ;(loss-condition (Red Blue) (captured General)  )
+   (loss-condition (Red Blue) (checkmated General))
    (loss-condition (Red Blue) stalemated )
    (loss-condition (Red Blue) repetition )
 )

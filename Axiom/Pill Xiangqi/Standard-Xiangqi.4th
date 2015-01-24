@@ -123,24 +123,58 @@ pieces}
 	BlueLost OFF
 ;
 
-: OnIsGameOver
-	#UnknownScore
-	RedLost @
-	IF
-		DROP
-		current-player Red = IF
-			^" You lose " #LossScore
-		ELSE
-			^" You win " #WinScore
+: OpposedKing
+	BEGIN
+		DUP piece-type-at 1 = NOT
+	WHILE
+		9 +
+		DUP i1 > IF
+			DROP FALSE EXIT
 		ENDIF
+	REPEAT
+	DUP i2 > IF \ In bottom rank, meaning that not possible to be opposed
+		DROP FALSE EXIT
+	ENDIF
+	9 +
+	BEGIN
+		DUP empty-at?
+	WHILE
+		9 +
+		DUP i1 > IF
+			DROP FALSE EXIT
+		ENDIF
+	REPEAT
+	piece-type-at 1 =
+;
+: OpposedKings
+	d10 OpposedKing
+	e10 OpposedKing OR
+	f10 OpposedKing OR
+;
+
+: OnIsGameOver
+	stalemate? IF
+		^" Stalemated: " #LossScore
 	ELSE
-		BlueLost @
-		IF
-			DROP
-			current-player Blue = IF
-				^" You win "  #WinScore
+		RedLost @ IF
+			current-player Red = IF
+				#LossScore
 			ELSE
-				^" You lose " #LossScore
+				#WinScore
+			ENDIF
+		ELSE
+			BlueLost @ IF
+				current-player Blue = IF
+					#WinScore
+				ELSE
+					#LossScore
+				ENDIF
+			ELSE \ opposed-kings
+				OpposedKings IF
+					^" Opposed: " #LossScore
+				ELSE
+					#UnknownScore
+				ENDIF
 			ENDIF
 		ENDIF
 	ENDIF
