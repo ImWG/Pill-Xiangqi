@@ -1,0 +1,7 @@
+   (music "Audio\\PillXiangqiChina.mid")
+   (win-sound "Audio\\Pan.wav")
+   (loss-sound "Audio\\Pan.wav")
+   (opening-sound "Audio\\Pan.wav")
+   (release-sound "Audio\\BongPercussive.wav")
+   (move-sound "Audio\\Bong5th.wav")
+   (capture-sound "Audio\\WoodBells.wav")

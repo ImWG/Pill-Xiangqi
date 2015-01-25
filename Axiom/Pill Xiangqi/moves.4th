@@ -224,3 +224,13 @@ moves}
 {moves Soldier-moves
 	{move} Soldier-move
 moves}
+
+: SoldierX-move
+	North Shift!
+	East Shift!
+	West ShiftNotMySide!
+	South ShiftNotMySide!
+;
+{moves SoldierX-moves
+	{move} SoldierX-move
+moves}

@@ -4,16 +4,10 @@
 ;You can download source codes in github: https://github.com/ImWG/Pill-Xiangqi.git
 
 (game
-	(title "4-Handed Xiangqi 12x12")
+	(title "4-Handed Xiangqi 12x12(Vertical Allied)")
 	(engine "Axiom\Pill Xiangqi\Axiom.dll")
    
-   (music "Audio\\China.mid")
-   (win-sound "Audio\\Pan.wav")
-   (loss-sound "Audio\\Pan.wav")
-   (opening-sound "Audio\\Pan.wav")
-   (release-sound "Audio\\BongPercussive.wav")
-   (move-sound "Audio\\Bong5th.wav")
-   (capture-sound "Audio\\WoodBells.wav")
+	(include "Include\PillXiangqiStyle.zrf")
    (players Red Blue Grey Yellow)
    (turn-order Red Blue Grey Yellow)
    (animate-drops false)
@@ -203,4 +197,16 @@
 		(moves (from add))
    )
    (loss-condition (Red Grey Blue Yellow) stalemated)
+)
+
+(variant
+	(title "4-Handed Xiangqi 12x12(Horizontal Allied)")
+)
+
+(variant
+	(title "4-Handed Xiangqi 12x12(Diagonal Allied)")
+)
+
+(variant
+	(title "4-Handed Xiangqi 12x12(Cutthroat)")
 )
